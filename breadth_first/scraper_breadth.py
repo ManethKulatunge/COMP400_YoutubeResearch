@@ -16,6 +16,8 @@ def create_tree(starter_video, tree_depth):
     node_list = [first]
     recommended_videos = [first.name]
 
+    url_dict = defaultdict(tuple)
+
     iterations = 0
     while(node_list and iterations<40):
         current = node_list.pop(0)
@@ -25,7 +27,23 @@ def create_tree(starter_video, tree_depth):
         path = '//*[@id="related"]/ytd-watch-next-secondary-results-renderer//*[@id="thumbnail"]'
         time.sleep(1)
         driver.implicitly_wait(5)
-        elements = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, path))) #This is a dummy element)
+        elements = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, path))) 
+
+        title_path = '//*[@id="title"]/h1'
+        description_path = '//*[@id="description"]'
+
+        title_list = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, title_path)))
+        title = title_list[0].text
+
+        description_list = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, description_path)))
+        description_temp = description_list[1].text
+        description_arr = description_temp.split("\n")
+        description_arr.pop(0)
+        description_arr.pop(-1)
+        description = "".join(description_arr)
+
+        url_dict[current.name] = (title,description)
+
         hrefs = [i.get_attribute('href') for i in elements]
 
         count = 0
