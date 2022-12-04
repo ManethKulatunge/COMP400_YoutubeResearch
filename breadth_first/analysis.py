@@ -10,12 +10,12 @@ from collections import defaultdict
 import time
 import json
 
-f = open("seed_list.txt", "r")
+f = open("seed_list_2.txt", "r")
 
 title_path = '//*[@id="title"]/h1'
 description_path = '//*[@id="description"]'
 
-count = 1
+count = 42
 for line in f:
     (tree, map) = create_tree(line[:-1], defaultdict(list))
 
@@ -35,8 +35,10 @@ for line in f:
             description_list = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, description_path)))
             description_temp = description_list[1].text
             description_arr = description_temp.split("\n")
-            description_arr.pop(0)
-            description_arr.pop(-1)
+            if (description_arr):
+                description_arr.pop(0)
+            if (description_arr):
+                description_arr.pop(-1)
             description = "".join(description_arr)
 
             url_list[video] = (title,description)
@@ -64,5 +66,6 @@ for line in f:
     file_name = "bfs_"+str(count)+".json"
     with open(file_name, "w") as outfile:
         outfile.write(json_object)
-    break
+    
+    count+=1
     

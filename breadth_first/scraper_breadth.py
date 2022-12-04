@@ -38,8 +38,10 @@ def create_tree(starter_video, tree_depth):
         description_list = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, description_path)))
         description_temp = description_list[1].text
         description_arr = description_temp.split("\n")
-        description_arr.pop(0)
-        description_arr.pop(-1)
+        if description_arr:
+            description_arr.pop(0)
+        if description_arr:
+            description_arr.pop(-1)
         description = "".join(description_arr)
 
         url_dict[current.name] = (title,description)
