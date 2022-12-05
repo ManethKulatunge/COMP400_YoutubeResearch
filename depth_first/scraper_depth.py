@@ -13,17 +13,21 @@ url_dict = defaultdict(tuple)
 depth_dict = defaultdict(list)
 
 def depth_first_search(driver, node, recommended_videos, depth):
-    if depth == 5:
+    if depth == 6:
         return 
     current = node
     driver.implicitly_wait(5)
     time.sleep(1)
     driver.get(current.name)
     path = '//*[@id="related"]/ytd-watch-next-secondary-results-renderer//*[@id="thumbnail"]'
+    path2 = '//*[@id="video-title"]'
     time.sleep(1)
-    driver.implicitly_wait(5)
+    driver.implicitly_wait(10)
     elements = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, path)))
+    elements_2 = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, path2)))
     hrefs = [i.get_attribute('href') for i in elements]
+    titles = [i.get_attribute('title') for i in elements_2]
+    recommendation_titles = titles[0:5]
 
     title_path = '//*[@id="title"]/h1'
     description_path = '//*[@id="description"]'
@@ -38,7 +42,7 @@ def depth_first_search(driver, node, recommended_videos, depth):
     description_arr.pop(-1)
     description = "".join(description_arr)
 
-    url_dict[current.name] = (title,description)
+    url_dict[current.name] = (title,description, recommendation_titles)
     
     new_node_href = ''
     for href in hrefs:
@@ -96,7 +100,8 @@ def create_tree(starter_video, tree_depth):
     #    print('Level ' +str(i) + ':' + str(len(tree_depth[i])))
 
     driver.close()
+    #print(url_dict)
 
-    return (node, url_dict, depth_dict)
+    return (first, url_dict, depth_dict)
 
 #create_tree("https://www.youtube.com/watch?v=t_CqAwkjiF4", defaultdict(list))

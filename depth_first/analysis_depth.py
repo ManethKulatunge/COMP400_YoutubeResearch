@@ -16,28 +16,27 @@ f = open("seed_list.txt", "r")
 title_path = '//*[@id="title"]/h1'
 description_path = '//*[@id="description"]'
 
-count = 1
+count = 38
 for line in f:
     (tree, map, depth_dict) = create_tree(line[:-1], defaultdict(list))
 
     #url_list = defaultdict(tuple)
-    print(map)
+    #print(map)
 
 
     data = defaultdict(list)
 
-    for parent in depth_dict:
-        for video in depth_dict[parent]:
-            if map[video] != ():
-                data[parent].append({
-                    'url': video,
-                    'title': map[video][0],
-                    'description': map[video][1]
-                })
+    dive = 0
+    dive_map = {0:[], 1:[], 2:[]}
+    for pre, fill, node in RenderTree(tree):
+        if node.name in map:
+            dive_map[dive].append((map[node.name][0], map[node.name][2]))
+        if not node.children:
+            dive += 1
     
-    json_object = json.dumps(data, indent = 4) 
+    json_object = json.dumps(dive_map, indent = 4) 
     file_name = "dfs_"+str(count)+".json"
     with open(file_name, "w") as outfile:
         outfile.write(json_object)
-    break
+    count+=1
     
