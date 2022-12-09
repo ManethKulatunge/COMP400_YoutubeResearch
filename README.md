@@ -12,8 +12,12 @@ datasets - consists of data sets I used for the text classification process/mode
 
 text_classification - consists of notebook and python script related to text classification
 
+breadth_first - code and files related to breadth first selenium scraper
+
+depth_first - code and files related to depth first selenium scraper
+
 ## Experiment Summary and Progress
 
-There are broadly two components to my experiment. Web Scraping and Text Classification. I have currently worked on Text Classification where we can pass in text (youtube comments, title etc) that we want to classify and have the model spit out a label (class value) which tells us if it is a conspiracy or not.
+There are broadly two components to my experiment. Web Scraping and Text Classification. I have currently worked on Text Classification where we can pass in text (youtube comments, title etc) that we want to classify and have the model return a label (class value) which tells us if it is a conspiracy or not.
 
-The web scraper will assist me with mimicking general user interactions and the recommendation system on Youtube based on a survey Professor Vybihal conducted for a former Youtube analysis-based project. This scraper will find the text related to the newly suggested videos and use the aforementioned model. 
+The web scraper will assist me with obtaining suggestions made by the recommendation system and use the aforementioned model to classify the recommended videos
